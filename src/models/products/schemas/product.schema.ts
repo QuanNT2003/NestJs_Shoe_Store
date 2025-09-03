@@ -12,22 +12,22 @@ export class Product {
   @Prop({ require: true, unique: true })
   productId: string;
 
-  @Prop({ require: true })
+  @Prop()
   description: string;
 
-  @Prop({ require: true })
+  @Prop()
   cost: number;
 
-  @Prop({ require: true })
+  @Prop()
   price: number;
 
-  @Prop({ require: true })
+  @Prop()
   star: number;
 
-  @Prop({ require: true })
+  @Prop()
   classify: string;
 
-  @Prop({ require: true })
+  @Prop()
   discount: number;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Category.name })

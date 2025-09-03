@@ -26,6 +26,11 @@ export class BrandsController {
     return this.brandsService.findAll();
   }
 
+  @Get('/nation')
+  findAllNation() {
+    return this.brandsService.findAllNation();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.brandsService.findOne(id);

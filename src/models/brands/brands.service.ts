@@ -60,10 +60,17 @@ export class BrandsService {
     return this.brandModel.find().exec();
   }
 
+  async findAllNation(): Promise<string[]> {
+    // return this.brandModel.find({
+
+    // }).limit(2).skip(5).sort().exec();
+    return this.brandModel.find().distinct('nation').exec();
+  }
+
   async findOne(id: string): Promise<Brand> {
-    const size = await this.brandModel.findById(id).exec();
-    if (!size) throw new NotFoundException('size not found');
-    return size;
+    const brand = await this.brandModel.findById(id).exec();
+    if (!brand) throw new NotFoundException('brand not found');
+    return brand;
   }
 
   async update(id: string, updateBrandDto: UpdateBrandDto): Promise<Brand> {

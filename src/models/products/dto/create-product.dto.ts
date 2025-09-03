@@ -1,1 +1,42 @@
-export class CreateProductDto {}
+import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+class ImageDto {
+  @IsString()
+  @IsNotEmpty()
+  publicId: string;
+
+  @IsString()
+  @IsNotEmpty()
+  url: string;
+}
+
+export class CreateProductDto {
+  @IsNotEmpty({ message: 'Name is required' })
+  name: string;
+
+  @IsOptional()
+  description?: string;
+
+  @IsOptional()
+  cost?: number;
+
+  @IsOptional()
+  price?: number;
+
+  @IsOptional()
+  star?: number;
+
+  @IsOptional()
+  classify?: string;
+
+  @IsOptional()
+  discount?: number;
+
+  @IsOptional()
+  category?: string;
+
+  @IsOptional()
+  brand?: string;
+
+  @IsOptional()
+  images?: ImageDto[];
+}
