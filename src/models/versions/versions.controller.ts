@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Put,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { VersionsService } from './versions.service';
 import { CreateVersionDto } from './dto/create-version.dto';
 import { UpdateVersionDto } from './dto/update-version.dto';
@@ -19,16 +27,16 @@ export class VersionsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.versionsService.findOne(+id);
+    return this.versionsService.findOne(id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateVersionDto: UpdateVersionDto) {
-    return this.versionsService.update(+id, updateVersionDto);
+    return this.versionsService.update(id, updateVersionDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.versionsService.remove(+id);
+    return this.versionsService.remove(id);
   }
 }

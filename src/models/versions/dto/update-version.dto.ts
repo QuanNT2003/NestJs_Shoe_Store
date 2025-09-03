@@ -1,4 +1,18 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateVersionDto } from './create-version.dto';
+import { IsNotEmpty, IsOptional } from 'class-validator';
 
-export class UpdateVersionDto extends PartialType(CreateVersionDto) {}
+export class UpdateVersionDto {
+  @IsOptional()
+  _id?: string;
+
+  @IsNotEmpty({ message: 'Product Id is required' })
+  productId: string;
+
+  @IsNotEmpty({ message: 'Size is required' })
+  size: string;
+
+  @IsNotEmpty({ message: 'Color is required' })
+  color: string;
+
+  @IsOptional()
+  inStock: number;
+}

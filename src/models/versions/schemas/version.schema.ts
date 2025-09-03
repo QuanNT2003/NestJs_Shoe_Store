@@ -13,7 +13,7 @@ export class Version {
   @Prop({ require: true })
   productId: string;
 
-  @Prop({ require: true })
+  @Prop()
   inStock: number;
 
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: Size.name })
