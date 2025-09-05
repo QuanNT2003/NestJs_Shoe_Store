@@ -46,4 +46,13 @@ export class UpdateProductDto {
 
   @IsOptional()
   images?: ImageDto[];
+
+  @IsOptional()
+  readonly createdAt?: Date;
+
+  @IsOptional()
+  readonly updatedAt?: Date;
+
+  @IsOptional()
+  readonly __v?: number;
 }

@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 class ImageDto {
   @IsString()
@@ -10,33 +10,43 @@ class ImageDto {
   url: string;
 }
 
-export class UpdateBrandDto {
+export class UpdateUserDto {
   @IsOptional()
   _id?: string;
-
-  @IsOptional()
-  brandId?: string;
 
   @IsNotEmpty({ message: 'Name is required' })
   name: string;
 
   @IsOptional()
+  userId: string;
+
+  @IsOptional()
   images?: ImageDto[];
 
-  @IsOptional()
-  email?: string;
+  @IsNotEmpty({ message: 'Email is required' })
+  @IsEmail({}, { message: 'Invalid email format' })
+  email: string;
 
   @IsOptional()
-  phone?: string;
+  phone: string;
 
   @IsOptional()
-  note?: string;
+  address: string;
 
   @IsOptional()
-  web?: string;
+  role: string;
 
   @IsOptional()
-  nation?: string;
+  accountType: string;
+
+  @IsOptional()
+  isActive: string;
+
+  @IsOptional()
+  codeId: string;
+
+  @IsOptional()
+  codeExpired: Date;
 
   @IsOptional()
   readonly createdAt?: Date;

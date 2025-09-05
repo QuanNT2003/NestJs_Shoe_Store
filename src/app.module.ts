@@ -10,6 +10,7 @@ import { ProductsModule } from './models/products/products.module';
 import { VersionsModule } from './models/versions/versions.module';
 import { SizesModule } from './models/sizes/sizes.module';
 import { NumberIdModule } from './models/number-id/number-id.module';
+import { UsersModule } from './models/users/users.module';
 @Module({
   imports: [
     CategoriesModule,
@@ -19,6 +20,7 @@ import { NumberIdModule } from './models/number-id/number-id.module';
     SizesModule,
     ColorsModule,
     NumberIdModule,
+    UsersModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

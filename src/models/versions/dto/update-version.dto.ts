@@ -15,4 +15,13 @@ export class UpdateVersionDto {
 
   @IsOptional()
   inStock: number;
+
+  @IsOptional()
+  readonly createdAt?: Date;
+
+  @IsOptional()
+  readonly updatedAt?: Date;
+
+  @IsOptional()
+  readonly __v?: number;
 }
