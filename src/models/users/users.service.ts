@@ -7,12 +7,13 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User, UserDocument } from './schemas/user.schema';
 import {
   NumberId,
   NumberIdDocument,
 } from '../number-id/schemas/number-id.schema';
-import { hashPasswordHelper } from 'src/helper/util';
+import { hashPasswordHelper, comparePassword } from 'src/helper/util';
 import aqp from 'api-query-params';
 
 @Injectable()
@@ -111,6 +112,41 @@ export class UsersService {
     }
 
     return updated;
+  }
+
+  async updatePassword(
+    id: string,
+    updatePasswordDto: UpdatePasswordDto,
+  ): Promise<User> {
+    const { oldPassword, newPassword } = updatePasswordDto;
+
+    const user = await this.userModel.findById(id);
+
+    if (user) {
+      // console.log(user);
+
+      const compare = await comparePassword(oldPassword, user.password);
+      // console.log(compare);
+
+      if (compare === true) {
+        const newHashpassword = await hashPasswordHelper(newPassword);
+        const updated = await this.userModel.findByIdAndUpdate(
+          id,
+          { password: newHashpassword },
+          { new: true },
+        );
+
+        if (!updated) {
+          throw new NotFoundException(`User with ID "${id}" not found`);
+        }
+
+        return updated;
+      } else {
+        throw new NotFoundException(`User with ID "${id}" has wrong password`);
+      }
+    } else {
+      throw new NotFoundException(`User with ID "${id}" not found`);
+    }
   }
 
   async remove(id: string): Promise<User> {
