@@ -1,13 +1,14 @@
 import {
   Injectable,
-  NotFoundException,
+  // NotFoundException,
   // BadRequestException,
-  UnauthorizedException,
+  // UnauthorizedException,
 } from '@nestjs/common';
-import { AuthLoginDto } from './dto/auth-login.dto';
+// import { AuthLoginDto } from './dto/auth-login.dto';
 import { UsersService } from 'src/models/users/users.service';
 import { comparePassword } from 'src/helper/util';
 import { JwtService } from '@nestjs/jwt';
+import { UserDocument } from 'src/models/users/schemas/user.schema';
 @Injectable()
 export class AuthService {
   constructor(
@@ -17,13 +18,13 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findByEmail(username);
-    if (user && (await comparePassword(password, user.password))) {
+    if (user && comparePassword(password, user.password)) {
       return user;
     }
     return null;
   }
 
-  async login(user: any) {
+  login(user: UserDocument) {
     const payload = { username: user.email, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),

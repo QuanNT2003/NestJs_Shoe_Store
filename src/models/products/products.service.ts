@@ -49,8 +49,10 @@ export class ProductsService {
       });
       return await createdBrand.save();
     } catch (error) {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-      throw new BadRequestException(error.message);
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Unknown error');
     }
   }
 

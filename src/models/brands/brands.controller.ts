@@ -6,12 +6,12 @@ import {
   Param,
   Delete,
   Put,
-  UseGuards,
+  // UseGuards,
 } from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
-import { JwtAuthGuard } from 'src/auth/passport/jwt-auth.guard';
+// import { JwtAuthGuard } from 'src/auth/passport/jwt-auth.guard';
 
 @Controller('brands')
 export class BrandsController {

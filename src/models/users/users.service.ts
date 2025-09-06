@@ -4,7 +4,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Error, Model } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
@@ -76,12 +76,15 @@ export class UsersService {
       });
       return await createdUser.save();
     } catch (error) {
-      throw new BadRequestException(error.message);
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Unknown error');
     }
   }
 
   async findAll(query: string, page: number) {
-    const { filter, limit, sort } = aqp(query);
+    const { limit, sort } = aqp(query);
 
     const totalUser = (await this.userModel.find()).length;
     const totalPage = Math.ceil(totalUser / limit);
@@ -130,7 +133,7 @@ export class UsersService {
     if (user) {
       // console.log(user);
 
-      const compare = await comparePassword(oldPassword, user.password);
+      const compare = comparePassword(oldPassword, user.password);
       // console.log(compare);
 
       if (compare === true) {

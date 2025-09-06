@@ -5,7 +5,7 @@ import { UpdateColorDto } from './dto/update-color.dto';
 @Injectable()
 export class ColorsService {
   create(createColorDto: CreateColorDto) {
-    return 'This action adds a new color';
+    return createColorDto;
   }
 
   findAll() {
@@ -17,7 +17,7 @@ export class ColorsService {
   }
 
   update(id: number, updateColorDto: UpdateColorDto) {
-    return `This action updates a #${id} color`;
+    return updateColorDto;
   }
 
   remove(id: number) {

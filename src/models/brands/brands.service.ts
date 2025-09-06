@@ -49,7 +49,10 @@ export class BrandsService {
       });
       return await createdBrand.save();
     } catch (error) {
-      throw new BadRequestException(error.message);
+      if (error instanceof Error) {
+        throw new BadRequestException(error.message);
+      }
+      throw new BadRequestException('Unknown error');
     }
   }
 

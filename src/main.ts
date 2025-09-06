@@ -13,4 +13,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1', { exclude: [''] });
   await app.listen(8000);
 }
-bootstrap();
+bootstrap().catch((err) => {
+  console.error('❌ Error while starting the server:', err);
+  process.exit(1);
+});
