@@ -28,6 +28,11 @@ export class UsersService {
     if (user) return true;
     else return false;
   };
+
+  findByEmail = async (email: string) => {
+    const user = await this.userModel.findOne({ email: email });
+    return user;
+  };
   async create(createUserDto: CreateUserDto): Promise<User> {
     try {
       const { name, email, password, phone, address, images } = createUserDto;
@@ -142,7 +147,9 @@ export class UsersService {
 
         return updated;
       } else {
-        throw new NotFoundException(`User with ID "${id}" has wrong password`);
+        throw new BadRequestException(
+          `User with ID "${id}" has wrong password`,
+        );
       }
     } else {
       throw new NotFoundException(`User with ID "${id}" not found`);

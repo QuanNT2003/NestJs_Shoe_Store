@@ -11,6 +11,7 @@ import { VersionsModule } from './models/versions/versions.module';
 import { SizesModule } from './models/sizes/sizes.module';
 import { NumberIdModule } from './models/number-id/number-id.module';
 import { UsersModule } from './models/users/users.module';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     CategoriesModule,
@@ -21,6 +22,7 @@ import { UsersModule } from './models/users/users.module';
     ColorsModule,
     NumberIdModule,
     UsersModule,
+    AuthModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

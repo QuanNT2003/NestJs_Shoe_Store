@@ -3,14 +3,15 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { UpdateBrandDto } from './dto/update-brand.dto';
+import { JwtAuthGuard } from 'src/auth/passport/jwt-auth.guard';
 
 @Controller('brands')
 export class BrandsController {
@@ -26,6 +27,7 @@ export class BrandsController {
     return this.brandsService.findAll();
   }
 
+  // @UseGuards(JwtAuthGuard)
   @Get('/nation')
   findAllNation() {
     return this.brandsService.findAllNation();

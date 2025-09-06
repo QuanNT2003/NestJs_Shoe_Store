@@ -5,7 +5,7 @@ import { UpdateNumberIdDto } from './dto/update-number-id.dto';
 @Injectable()
 export class NumberIdService {
   create(createNumberIdDto: CreateNumberIdDto) {
-    return 'This action adds a new numberId';
+    return createNumberIdDto;
   }
 
   findAll() {
@@ -17,7 +17,7 @@ export class NumberIdService {
   }
 
   update(id: number, updateNumberIdDto: UpdateNumberIdDto) {
-    return `This action updates a #${id} numberId`;
+    return updateNumberIdDto;
   }
 
   remove(id: number) {
