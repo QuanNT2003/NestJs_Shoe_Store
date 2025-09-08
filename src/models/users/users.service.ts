@@ -18,16 +18,17 @@ import aqp from 'api-query-params';
 import { AuthRegisterDto } from 'src/auth/dto/auth-login.dto';
 import { v4 as uuidv4 } from 'uuid';
 import dayjs from 'dayjs';
-
+import { MailerService } from '@nestjs-modules/mailer';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(NumberId.name) private numberIdModel: Model<NumberIdDocument>,
+    private readonly mailerService: MailerService,
   ) {}
 
   emailExist = async (email: string) => {
-    const user = await this.userModel.exists({ email });
+    const user = await this.userModel.exists({ email: email });
     if (user) return true;
     else return false;
   };
@@ -211,9 +212,24 @@ export class UsersService {
         codeId: uuidv4(),
         codeExpired: dayjs().add(1, 'day'),
       });
-      return await createdUser.save();
-
       //send email
+      this.mailerService
+        .sendMail({
+          to: createdUser.email, // list of receivers
+          subject: 'Activate your account at TQShoeShop', // Subject line
+          template: 'register',
+          context: {
+            name: createdUser?.name ?? createdUser.email,
+            activationCode: createdUser?.codeId,
+          },
+        })
+        .then(() => {
+          console.log('Email sent successfully to:', createdUser.email);
+        })
+        .catch((error) => {
+          console.error('Failed to send email:', error);
+        });
+      return await createdUser.save();
     }
     // } catch (error) {
     //   if (error instanceof Error) {

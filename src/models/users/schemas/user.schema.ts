@@ -40,7 +40,7 @@ export class User {
   accountType: string;
 
   @Prop()
-  isActive: string;
+  isActive: boolean;
 
   @Prop()
   codeId: string;
