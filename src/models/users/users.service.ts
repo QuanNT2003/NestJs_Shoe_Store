@@ -15,6 +15,9 @@ import {
 } from '../number-id/schemas/number-id.schema';
 import { hashPasswordHelper, comparePassword } from 'src/helper/util';
 import aqp from 'api-query-params';
+import { AuthRegisterDto } from 'src/auth/dto/auth-login.dto';
+import { v4 as uuidv4 } from 'uuid';
+import dayjs from 'dayjs';
 
 @Injectable()
 export class UsersService {
@@ -34,53 +37,53 @@ export class UsersService {
     return user;
   };
   async create(createUserDto: CreateUserDto): Promise<User> {
-    try {
-      const { name, email, password, phone, address, images } = createUserDto;
+    // try {
+    const { name, email, password, phone, address, images } = createUserDto;
 
-      //check email
-      const exists = await this.emailExist(email);
-      if (exists) {
-        throw new BadRequestException('Email already exists');
-      }
-
-      const hashPassword = await hashPasswordHelper(password);
-
-      // lấy số ID hiện tại của brand
-      const numberUser = await this.numberIdModel.findOne({ name: 'user' });
-      if (!numberUser) {
-        throw new BadRequestException('NumberId for user not found');
-      }
-
-      // tạo userId dạng us00000001
-      let userId = 'us';
-      while (userId.length + (numberUser.numberId + 1).toString().length < 10) {
-        userId += '0';
-      }
-      userId += (numberUser.numberId + 1).toString();
-
-      // update counter
-      await this.numberIdModel.findOneAndUpdate(
-        { name: 'user' },
-        { numberId: numberUser.numberId + 1 },
-      );
-
-      // tạo document
-      const createdUser = new this.userModel({
-        name,
-        email,
-        phone,
-        address,
-        images,
-        userId: userId,
-        password: hashPassword,
-      });
-      return await createdUser.save();
-    } catch (error) {
-      if (error instanceof Error) {
-        throw new BadRequestException(error.message);
-      }
-      throw new BadRequestException('Unknown error');
+    //check email
+    const exists = await this.emailExist(email);
+    if (exists) {
+      throw new BadRequestException('Email already exists');
     }
+
+    const hashPassword = await hashPasswordHelper(password);
+
+    // lấy số ID hiện tại của brand
+    const numberUser = await this.numberIdModel.findOne({ name: 'user' });
+    if (!numberUser) {
+      throw new BadRequestException('NumberId for user not found');
+    }
+
+    // tạo userId dạng us00000001
+    let userId = 'us';
+    while (userId.length + (numberUser.numberId + 1).toString().length < 10) {
+      userId += '0';
+    }
+    userId += (numberUser.numberId + 1).toString();
+
+    // update counter
+    await this.numberIdModel.findOneAndUpdate(
+      { name: 'user' },
+      { numberId: numberUser.numberId + 1 },
+    );
+
+    // tạo document
+    const createdUser = new this.userModel({
+      name,
+      email,
+      phone,
+      address,
+      images,
+      userId: userId,
+      password: hashPassword,
+    });
+    return await createdUser.save();
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     throw new BadRequestException(error.message);
+    //   }
+    //   throw new BadRequestException('Unknown error');
+    // }
   }
 
   async findAll(query: string, page: number) {
@@ -163,5 +166,60 @@ export class UsersService {
     const deleted = await this.userModel.findByIdAndDelete(id).exec();
     if (!deleted) throw new NotFoundException('User not found');
     return deleted;
+  }
+
+  async register(authRegisterDto: AuthRegisterDto): Promise<User> {
+    // try {
+    const { name, email, password } = authRegisterDto;
+
+    //check email
+    const exists = await this.emailExist(email);
+    console.log(exists);
+
+    if (exists === true) {
+      throw new BadRequestException('Email already exists');
+    } else {
+      //hash Password
+      const hashPassword = await hashPasswordHelper(password);
+
+      // lấy số ID hiện tại của brand
+      const numberUser = await this.numberIdModel.findOne({ name: 'user' });
+      if (!numberUser) {
+        throw new BadRequestException('NumberId for user not found');
+      }
+
+      // tạo userId dạng us00000001
+      let userId = 'us';
+      while (userId.length + (numberUser.numberId + 1).toString().length < 10) {
+        userId += '0';
+      }
+      userId += (numberUser.numberId + 1).toString();
+
+      // update counter
+      await this.numberIdModel.findOneAndUpdate(
+        { name: 'user' },
+        { numberId: numberUser.numberId + 1 },
+      );
+
+      // tạo document
+      const createdUser = new this.userModel({
+        name,
+        email,
+        userId: userId,
+        password: hashPassword,
+        isActive: false,
+        codeId: uuidv4(),
+        codeExpired: dayjs().add(1, 'day'),
+      });
+      return await createdUser.save();
+
+      //send email
+    }
+    // } catch (error) {
+    //   if (error instanceof Error) {
+    //     throw new BadRequestException(error.message);
+    //   }
+    //   throw new BadRequestException('Unknown error');
+    // }
   }
 }

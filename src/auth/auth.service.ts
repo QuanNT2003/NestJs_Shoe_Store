@@ -9,6 +9,7 @@ import { UsersService } from 'src/models/users/users.service';
 import { comparePassword } from 'src/helper/util';
 import { JwtService } from '@nestjs/jwt';
 import { UserDocument } from 'src/models/users/schemas/user.schema';
+import { AuthRegisterDto } from './dto/auth-login.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -29,6 +30,10 @@ export class AuthService {
     return {
       access_token: this.jwtService.sign(payload),
     };
+  }
+
+  async register(authRegisterDto: AuthRegisterDto) {
+    return this.usersService.register(authRegisterDto);
   }
   // async login(authLoginDto: AuthLoginDto) {
   //   const { email, password } = authLoginDto;

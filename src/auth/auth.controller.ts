@@ -3,6 +3,7 @@ import { AuthService } from './auth.service';
 // import { AuthLoginDto } from './dto/auth-login.dto';
 import { LocalAuthGuard } from './passport/local-auth.guard';
 import { UserDocument } from 'src/models/users/schemas/user.schema';
+import { AuthRegisterDto } from './dto/auth-login.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -16,5 +17,10 @@ export class AuthController {
   @Post('/login')
   login(@Request() req: Request & { user: UserDocument }) {
     return this.authService.login(req.user);
+  }
+
+  @Post('/register')
+  register(@Body() authRegisterDto: AuthRegisterDto) {
+    return this.authService.register(authRegisterDto);
   }
 }
